@@ -14,10 +14,22 @@ body{
     z-index:-10;
     font-size: 25pt;
 }
-#header a:link,
-#header a:visited,
-#header a:hover,
-#header a:active {
+
+#footer {
+    position: fixed;
+    color: #fff;
+    background-color:#333;
+    height: 19px;
+    width:100%;
+    z-index:-10;
+    font-size:10pt;
+    bottom: 0px;
+}
+
+#header a:link, #footer a:link,
+#header a:visited, #footer a:visited,
+#header a:hover, #footer a:hover,
+#header a:active, #footer a:active {
     color: #fff;
     text-decoration: none;
 }
@@ -25,7 +37,7 @@ body{
 #filenav{ 
     position:fixed;
     top: 50px;
-    bottom: 0px;
+    bottom: 19px;
     width:220px;
     background-color:#dc8; 
     min-height:650px; /* for modern browsers */
@@ -39,4 +51,10 @@ body{
     bottom: 0px;
     right:0px;
     left: 220px;
+}
+
+.Ymacs_Message_Popup {
+    float: right;
+    text-align: right;
+    width: auto;
 }

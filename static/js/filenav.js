@@ -25,7 +25,7 @@ $(document).ready( function() {
                     if (path.split('/').length <= 2) {
                         //If the path is at the root, refresh the root
                         //folder: 
-                       $(el).parents('.jqueryFileTree').trigger('refresh');
+                       $(el).parents('.jqueryFileTree').trigger('refresh_root');
                     } else {
                         //Find the parent folder and refresh it:
                         $(el).parents('.directory:first').children('a:first').trigger('refresh');

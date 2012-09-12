@@ -117,10 +117,10 @@
 		    showTree( $(this), escape(o.root) );
                     // Bind a refresh action to the root:
                     var self = $(this);
-                    $(this).bind('refresh', function(event) {
+                    $(this).bind('refresh_root', function(event) {
                         self.children().remove();
                         showTree( self, escape(o.root) );
-                    }, false);
+                    });
 		});
 	    }
 	});

@@ -1,24 +1,70 @@
 $(document).ready( function() {
+
+    var fileContextMenu = $('<ul id="fileContextMenu" class="contextMenu">\
+    <li class="delete">\
+        <a href="#delete">Delete</a>\
+    </li>\
+    <li class="copy">\
+        <a href="#force_reload">Force Reload</a>\
+    </li>\
+    </ul>');
+    $('body').append(fileContextMenu);
+
+    var fileContextMenuAction = function(action, el, pos) {
+        var path = el.attr('rel')
+        if(action == 'force_reload') {
+            editor.open(path, true);
+        }
+        if(action == 'delete') {
+            if(confirm('Are you sure you wish to delete this file?\n\n'+path)) {
+                var buffer = editor.getBuffer(path);
+                if(buffer) {
+                    buffer.close();
+                }
+                Crud.delete_path(path, function() {
+                    if (path.split('/').length <= 2) {
+                        //If the path is at the root, refresh the root
+                        //folder: 
+                       $(el).parents('.jqueryFileTree').trigger('refresh');
+                    } else {
+                        //Find the parent folder and refresh it:
+                        $(el).parents('.directory:first').children('a:first').trigger('refresh');
+                    }
+                });
+            }
+        }
+    };
+
+    var dirContextMenu = $('<ul id="dirContextMenu" class="contextMenu">\
+    <li class="delete">\
+        <a href="#delete">Delete</a>\
+    </li>\
+    <li class="refresh">\
+        <a href="#refresh">Refresh</a>\
+    </li>\
+    </ul>');
+    $('body').append(dirContextMenu);
+
+    var dirContextMenuAction = function(action, el, pos) {
+        var path = el.attr('rel')
+        if(action == 'refresh') {
+            $(el).trigger('refresh');
+        }
+    };
+
     $('#filenav').fileTree({
         root: '/',
         script: '/list_directory',
         expandSpeed: 500,
         collapseSpeed: 500,
-        multiFolder: false
+        multiFolder: false,
+        fileContextMenu: 'fileContextMenu',
+        fileContextMenuAction: fileContextMenuAction,
+        dirContextMenu: 'dirContextMenu',
+        dirContextMenuAction: dirContextMenuAction
     }, function(path) {
         //Get the file from the server:
-        Crud.get_file(path, function(data) {
-                //Load the content into the editor
-                //TODO: Make an abstract class for an editor so that we can
-                //swap them out.
-                //TODO: Lock this, so that either this can only be
-                //called sequentially, or that each successive call
-                //cancels other pending calls.
-                var path_parts = path.split('/')
-                var filename = path_parts[path_parts.length-1]
-                var buffer = window.ymacs.createBuffer({name:filename})
-                buffer.setCode(data['content'])
-                window.ymacs.switchToBuffer(buffer)
-        });
+        editor.open(path)
     });
+    
 });

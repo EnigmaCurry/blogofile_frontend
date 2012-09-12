@@ -25,8 +25,7 @@ var Crud = function() {
         jQuery.ajax({type: 'POST',
                      url:  '/delete_path',
                      data: JSON.stringify(
-                         {path:path,
-                          content:content}),
+                         {path:path}),
                      success: callback,
                      error: function(){alert('delete_path failed')},
                      contentType: 'application/json'
